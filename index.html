@@ -3,128 +3,347 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liên Minh Công Lý Ký Sự</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<title>Liên Minh Công Lý</title>
 
 <style>
-body{margin:0;font-family:'Noto Serif SC',serif;background:#f5fff5;color:#1b3a2f;overflow-x:hidden}
+body{
+  margin:0;
+  font-family:serif;
+  background:#0f1f1a;
+  color:#e8f5e9;
+  overflow-x:hidden;
+}
 
-/* PARALLAX BANNER */
+/* ===== BANNER ===== */
 header{
+  height:280px;
   position:relative;
-  height:100vh;
   overflow:hidden;
 }
-.layer{
+.banner{
   position:absolute;
-  width:100%;height:100%;
-  background-size:cover;
-  background-position:center;
+  width:110%;
+  height:110%;
+  background:url('https://images.unsplash.com/photo-1549880181-56a44cf4a9a5') center/cover;
+  filter:brightness(0.6);
 }
-.layer.bg{background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470');z-index:1}
-.layer.fog{background:radial-gradient(circle, rgba(255,255,255,0.3), transparent);z-index:2;animation:fogMove 20s linear infinite}
-
-@keyframes fogMove{0%{transform:translateX(0)}100%{transform:translateX(-200px)}}
-
 header h1{
-  position:relative;z-index:3;color:white;font-size:60px;text-align:center;top:40%;
-  text-shadow:2px 2px 10px rgba(0,0,0,0.7)
+  position:relative;
+  z-index:2;
+  text-align:center;
+  top:40%;
+  font-size:38px;
 }
 
-/* LEAVES */
-.leaf{
-  position:fixed;top:-50px;width:20px;height:20px;background:url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') no-repeat center/contain;
-  animation:fall linear infinite;z-index:999
+/* ===== NAV ===== */
+nav{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  background:rgba(0,0,0,0.7);
+  padding:15px;
+  position:sticky;
+  top:0;
+  z-index:1000;
 }
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg)}
+nav a{
+  cursor:pointer;
+  color:white;
 }
 
-nav{position:sticky;top:0;background:rgba(255,255,255,0.9);display:flex;justify-content:center;gap:40px;padding:15px}
-nav a{text-decoration:none;color:#1b3a2f;font-weight:bold}
+/* ===== PAGE ===== */
+.page{
+  display:none;
+  padding:50px;
+  animation:fade 0.5s;
+}
+.page.active{display:block}
 
-section{padding:80px 20px;max-width:1100px;margin:auto}
-.section-title{text-align:center;font-size:32px;margin-bottom:40px}
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1}
+}
 
-.members{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
-.member-card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.1);text-align:center}
-.member-card img{width:100%;height:250px;object-fit:cover}
+/* ===== MEMBERS ===== */
+.members{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+}
+.card{
+  background:#1b3a2f;
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+}
+.card:hover{transform:scale(1.05)}
+.card img{width:100%}
 
-/* LOGIN */
-.login-box{max-width:300px;margin:auto;text-align:center}
-input{padding:10px;margin:5px;width:100%}
-button{padding:10px;background:#2e7d32;color:white;border:none;cursor:pointer}
+/* ===== CHARACTER SCREEN ===== */
+#charScreen{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:radial-gradient(circle,#0f1f1a,#000);
+  display:none;
+  color:white;
+  z-index:999;
+  padding:30px;
+}
 
-footer{background:#1b3a2f;color:white;text-align:center;padding:20px}
+/* ===== LOGIN ===== */
+input{
+  padding:10px;
+  margin:5px;
+}
+button{
+  padding:10px;
+  cursor:pointer;
+}
+
+/* ===== MUSIC BTN ===== */
+.music-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#2e7d32;
+  padding:10px;
+  cursor:pointer;
+}
+
+/* ===== CANVAS ===== */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LEAVES AUTO GEN -->
-<script>
-for(let i=0;i<15;i++){
-  let leaf=document.createElement('div');
-  leaf.className='leaf';
-  leaf.style.left=Math.random()*100+'vw';
-  leaf.style.animationDuration=(5+Math.random()*10)+'s';
-  document.body.appendChild(leaf);
-}
-</script>
+<canvas id="bg"></canvas>
 
 <header>
-  <div class="layer bg"></div>
-  <div class="layer fog"></div>
-  <h1>Liên Minh Công Lý Ký Sự</h1>
+  <div class="banner" id="banner"></div>
+  <h1>Liên Minh Công Lý</h1>
 </header>
 
 <nav>
-  <a href="#so-nguyen">Sơ nguyên</a>
-  <a href="#thanh-vien">Thành viên</a>
-  <a href="#ky-su">Kỳ sự</a>
-  <a href="#tam-nguyen">Tâm nguyện</a>
-  <a href="#login">Đăng nhập</a>
+  <a onclick="showPage('home')">Trang chủ</a>
+  <a onclick="showPage('origin')">Sơ nguyên</a>
+  <a onclick="showPage('members')">Thành viên</a>
+  <a onclick="showPage('login')">Đăng nhập</a>
 </nav>
 
+<!-- HOME -->
+<div id="home" class="page active">
+  <h2>Trang chủ</h2>
+</div>
+
+<!-- ORIGIN -->
+<div id="origin" class="page">
+  <h2>Sơ nguyên</h2>
+  <p>Lịch sử hình thành...</p>
+</div>
+
+<!-- MEMBERS -->
+<div id="members" class="page">
+  <h2>Thành viên</h2>
+  <div class="members" id="memberList"></div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+  <h2>Đăng nhập</h2>
+  <input id="user" placeholder="Tài khoản"><br>
+  <input id="pass" type="password" placeholder="Mật khẩu"><br>
+  <button onclick="login()">Đăng nhập</button>
+  <p id="loginStatus"></p>
+</div>
+
+<!-- CHARACTER -->
+<div id="charScreen">
+<button onclick="closeChar()">X</button>
+
+<h1 id="charName"></h1>
+
+<img id="charImg" style="width:250px">
+
+<p>HP: <span id="hp"></span></p>
+<p>Nội lực: <span id="mana"></span></p>
+<p>Công: <span id="atk"></span></p>
+<p>Thủ: <span id="def"></span></p>
+
+<ul id="skills"></ul>
+</div>
+
 <!-- MUSIC -->
-<audio autoplay loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3">
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3">
 </audio>
-
-<section id="thanh-vien">
-<div class="section-title">9 Thành Viên</div>
-<div class="members">
+<div class="music-btn" onclick="toggleMusic()">🎵</div>
 
 <script>
-for(let i=1;i<=9;i++){
- document.write(`
- <div class='member-card'>
-   <img src='https://i.pravatar.cc/300?img=${i}'>
-   <h3>Nhân vật ${i}</h3>
-   <p>Hồ sơ: Kiếm khách, hành tẩu giang hồ.</p>
- </div>`)
+
+/* ===== SPA ===== */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
 }
-</script>
 
-</div>
-</section>
+/* ===== MEMBERS ===== */
+let list=document.getElementById("memberList")
+for(let i=1;i<=9;i++){
+ let div=document.createElement('div')
+ div.className='card'
+ div.innerHTML=`
+   <img src="https://i.pravatar.cc/300?img=${i}">
+   <h3>Nhân vật ${i}</h3>
+ `
+ div.onclick=()=>showChar(i)
+ list.appendChild(div)
+}
 
-<section id="login">
-<div class="section-title">Đăng nhập</div>
-<div class="login-box">
-<input type="text" placeholder="Tài khoản">
-<input type="password" placeholder="Mật khẩu">
-<button onclick="alert('Demo login thành công')">Đăng nhập</button>
-</div>
-</section>
+/* ===== CHARACTER ===== */
+function showChar(i){
+ let data={
+  name:"Nhân vật "+i,
+  img:`https://i.pravatar.cc/300?img=${i}`,
+  hp:Math.floor(Math.random()*500+500),
+  mana:Math.floor(Math.random()*300+200),
+  atk:Math.floor(Math.random()*100+50),
+  def:Math.floor(Math.random()*100+50),
+  skills:["Kiếm pháp","Khinh công","Nội công"]
+ }
 
-<footer>© 2026 Liên Minh Công Lý</footer>
+ document.getElementById("charScreen").style.display="block"
+ document.getElementById("charName").innerText=data.name
+ document.getElementById("charImg").src=data.img
+ document.getElementById("hp").innerText=data.hp
+ document.getElementById("mana").innerText=data.mana
+ document.getElementById("atk").innerText=data.atk
+ document.getElementById("def").innerText=data.def
 
-<!-- PARALLAX EFFECT -->
-<script>
+ let html=""
+ data.skills.forEach(s=>html+=`<li>${s}</li>`)
+ document.getElementById("skills").innerHTML=html
+
+ swordEffect()
+}
+
+function closeChar(){
+ document.getElementById("charScreen").style.display="none"
+}
+
+/* ===== SWORD EFFECT ===== */
+function swordEffect(){
+ let d=document.createElement("div")
+ d.style.position="fixed"
+ d.style.top="50%"
+ d.style.left="50%"
+ d.style.width="0px"
+ d.style.height="2px"
+ d.style.background="linear-gradient(to right, transparent, cyan, white)"
+ d.style.transform="translate(-50%,-50%)"
+ d.style.zIndex=1000
+
+ document.body.appendChild(d)
+
+ let w=0
+ let grow=setInterval(()=>{
+   w+=40
+   d.style.width=w+"px"
+   if(w>800) clearInterval(grow)
+ },10)
+
+ setTimeout(()=>d.remove(),500)
+}
+
+/* ===== LOGIN ===== */
+function login(){
+ let u=document.getElementById("user").value
+ let p=document.getElementById("pass").value
+
+ localStorage.setItem("user",u)
+ localStorage.setItem("pass",p)
+
+ document.getElementById("loginStatus").innerText="Đã lưu!"
+}
+
+/* ===== MUSIC ===== */
+let music=document.getElementById("music")
+function toggleMusic(){
+ if(music.paused) music.play()
+ else music.pause()
+}
+
+/* ===== PARALLAX ===== */
 document.addEventListener('mousemove',e=>{
- document.querySelector('.bg').style.transform=`translate(${e.clientX/50}px,${e.clientY/50}px)`
+ document.getElementById('banner').style.transform =
+  `translate(${e.clientX/50}px,${e.clientY/50}px)`
 })
+
+/* ===== PARTICLES ===== */
+let canvas=document.getElementById("bg")
+let ctx=canvas.getContext("2d")
+
+function resize(){
+ canvas.width=window.innerWidth
+ canvas.height=window.innerHeight
+}
+resize()
+window.onresize=resize
+
+let particles=[]
+for(let i=0;i<50;i++){
+ particles.push({
+  x:Math.random()*canvas.width,
+  y:Math.random()*canvas.height,
+  r:Math.random()*2,
+  speed:Math.random()*1
+ })
+}
+
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height)
+ ctx.fillStyle="white"
+
+ particles.forEach(p=>{
+  ctx.beginPath()
+  ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+  ctx.fill()
+
+  p.y+=p.speed
+  if(p.y>canvas.height) p.y=0
+ })
+
+ requestAnimationFrame(draw)
+}
+draw()
+
+/* ===== LEAVES ===== */
+for(let i=0;i<20;i++){
+ let leaf=document.createElement('div')
+ leaf.style.position="fixed"
+ leaf.style.top="-50px"
+ leaf.style.left=Math.random()*100+"vw"
+ leaf.style.width="20px"
+ leaf.style.height="20px"
+ leaf.style.background="url('https://cdn-icons-png.flaticon.com/512/2909/2909762.png') center/cover"
+ leaf.style.animation=`fall ${5+Math.random()*10}s linear infinite`
+ document.body.appendChild(leaf)
+}
+
+let style=document.createElement('style')
+style.innerHTML=`
+@keyframes fall{
+ to{transform:translateY(110vh) rotate(360deg);}
+}`
+document.head.appendChild(style)
+
 </script>
 
 </body>
